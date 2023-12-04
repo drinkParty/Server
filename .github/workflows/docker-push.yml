@@ -28,9 +28,9 @@ jobs:
 
       - name: Create application.yml
         run: |
-          touch ./src/main/resources/application.yaml
-          echo "${{ secrets.DB_SECRET }}" > ./src/main/resources/application.yaml
-          cat ./src/main/resources/application.yaml
+          cd ./src/main/resources
+          touch ./application.yml
+          echo "${{ secrets.DB_SECRET }}" > ./application.yml
         shell: bash
 
       - name: Grant execute permission for gradlew
