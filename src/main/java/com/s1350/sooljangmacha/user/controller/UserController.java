@@ -1,26 +1,34 @@
 package com.s1350.sooljangmacha.user.controller;
 
 import com.s1350.sooljangmacha.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "users", description = "유저 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
-    // 로그인
+//    @Operation(summary = "로그인", description = "")
+//    @PostMapping("/login")
 
-    // 로그아웃
+//    @Operation(summary = "로그아웃", description = "")
+//    @PostMapping("/logout")
 
-    // 회원탈퇴
+//    @Operation(summary = "회원탈퇴", description = "")
+//    @PostMapping("/signout")
 
-    // 프로필 불러오기
+//    @Operation(summary = "프로필 불러오기", description = "")
+//    @GetMapping("")
 
-    // 프로필 편집
+//    @Operation(summary = "프로필 편집", description = "")
+//    @PatchMapping("")
 
-    // 포장마차 좋아요 목록 조회
+//    @Operation(summary = "포장마차 좋아요 목록 조회", description = "")
+//    @GetMapping("/likes")
 
 }
