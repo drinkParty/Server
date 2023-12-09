@@ -2,6 +2,7 @@ package com.s1350.sooljangmacha.user.controller;
 
 import com.s1350.sooljangmacha.global.dto.BaseResponse;
 import com.s1350.sooljangmacha.global.resolver.UserAccount;
+import com.s1350.sooljangmacha.store.dto.response.GetStoreListRes;
 import com.s1350.sooljangmacha.user.dto.request.LoginReq;
 import com.s1350.sooljangmacha.user.dto.request.PatchProfileReq;
 import com.s1350.sooljangmacha.user.dto.request.SignupReq;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @Tag(name = "users", description = "유저 API")
 @RestController
@@ -99,7 +101,15 @@ public class UserController {
         return BaseResponse.OK();
     }
 
-//    @Operation(summary = "포장마차 좋아요 목록 조회", description = "")
-//    @GetMapping("/likes")
+    @Operation(summary = "[김초원] 포장마차 좋아요 목록 조회", description = "마이페이지의 좋아요 한 포차 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "404", description = "(E0001)잘못된 요청입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
+    })
+    @GetMapping("/likes")
+    public BaseResponse<List<GetStoreListRes>> getStoreOfLike(@Parameter(hidden = true) @UserAccount User user,
+                                                              @Parameter(description = "(String) 카테고리(좋아요순/후기순/최신순)", example = "후기순", required = true) @RequestParam(name = "category") String category) {
+        return BaseResponse.OK(userService.getStoreOfLike(user, category));
+    }
 
 }

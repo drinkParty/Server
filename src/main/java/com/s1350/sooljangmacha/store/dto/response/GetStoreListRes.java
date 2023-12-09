@@ -35,8 +35,10 @@ public class GetStoreListRes {
     private Long likeCount;
     @Schema(type = "Integer", description = "상점 후기 수", example = "10")
     private Integer reviewCount;
+    @Schema(type = "Boolean", description = "상점 좋아요 유무", example = "true")
+    private Boolean isLike;
 
-    public static GetStoreListRes toDto(Store store, Long likeCount){
+    public static GetStoreListRes toDto(Store store, Long likeCount, boolean isLike){
         String imgUrl = getThumbnail(store);
         return GetStoreListRes.builder()
                 .name(store.getName())
@@ -48,6 +50,7 @@ public class GetStoreListRes {
                 .imgUrl(imgUrl)
                 .likeCount(likeCount)
                 .reviewCount(store.getStoreReviewList().size())
+                .isLike(isLike)
                 .build();
     }
 

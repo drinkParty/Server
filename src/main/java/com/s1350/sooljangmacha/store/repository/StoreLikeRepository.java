@@ -15,7 +15,9 @@ public interface StoreLikeRepository extends JpaRepository<StoreLike, Long> {
 
     Optional<StoreLike> findByUserAndStore(User user, Store store);
 
-    @Query("SELECT COUNT(s.id) FROM StoreLike s WHERE s.isEnable = 1 and s.store = :store")
+    @Query("SELECT COUNT(s.id) FROM StoreLike s WHERE s.isEnable = true and s.store = :store")
     Long getLikeCountByIsEnable(@Param("store") Store store);
+
+    boolean existsByUserAndStoreAndIsEnable(User user, Store store, boolean isEnable);
 
 }

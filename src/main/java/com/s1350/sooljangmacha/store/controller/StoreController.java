@@ -43,7 +43,7 @@ public class StoreController {
     })
     public BaseResponse<List<GetStoreListRes>> getStores(@Parameter(hidden = true) @UserAccount User user,
                                                    @Parameter(description = "(String) 카테고리(좋아요순/후기순/최신순)", example = "후기순", required = true) @RequestParam(name = "category") String category){
-        return BaseResponse.OK(storeService.getStores(category));
+        return BaseResponse.OK(storeService.getStores(user, category));
     }
 
     @Operation(summary = "[윤희슬] 포장마차 상세 조회", description = "포장마차를 상세조회한다.")
