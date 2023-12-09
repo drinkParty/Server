@@ -1,6 +1,7 @@
 package com.s1350.sooljangmacha.user.service;
 
 
+import com.s1350.sooljangmacha.global.Constants;
 import com.s1350.sooljangmacha.global.exception.BaseException;
 import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import com.s1350.sooljangmacha.global.utils.JwtUtil;
@@ -15,6 +16,8 @@ import com.s1350.sooljangmacha.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @Service
@@ -40,6 +43,11 @@ public class UserService {
     }
 
     // 로그아웃
+    public void logout(User user, HttpServletRequest request) {
+        String header = request.getHeader(Constants.AUTHORIZATION_HEADER);
+        String token = jwtUtil.replaceBearer(header);
+        jwtUtil.logout(token, user.getId());
+    }
 
     // 회원탈퇴
 
