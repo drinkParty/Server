@@ -6,6 +6,7 @@ import com.s1350.sooljangmacha.store.dto.request.PostStoreReq;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReviewReq;
 import com.s1350.sooljangmacha.store.entity.Store;
 import com.s1350.sooljangmacha.store.entity.StoreReview;
+import com.s1350.sooljangmacha.store.entity.StoreImg;
 import com.s1350.sooljangmacha.store.repository.StoreImgRepository;
 import com.s1350.sooljangmacha.store.repository.StoreLikeRepository;
 import com.s1350.sooljangmacha.store.repository.StoreRepository;
@@ -40,7 +41,9 @@ public class StoreService {
         // 기획관련 한 번 더 물어보기 (예외처리)
         if(storeRepository.existsByXAndYAndIsEnable(req.getX(), req.getY(), true)) throw new BaseException(BaseResponseCode.EXISTS_STORE);
         // 저장
-        storeRepository.save(Store.toEntity(req));
+        Store store = Store.toEntity(req);
+        storeRepository.save(store);
+        storeImgRepository.saveAll(StoreImg.toEntityList(req.getImgUrls(), store));
     }
 
     // 포장마차 후기 조회
