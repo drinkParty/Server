@@ -36,8 +36,9 @@ public class StoreController {
 
     @Operation(summary = "[윤희슬] 위치별 포장마차 전체 조회", description = "")
     @GetMapping("")
-    public BaseResponse<GetStoreListRes> getStores(@Parameter(hidden = true) @UserAccount User user){
-        return BaseResponse.OK(storeService.getStores());
+    public BaseResponse<List<GetStoreListRes>> getStores(@Parameter(hidden = true) @UserAccount User user,
+                                                   @Parameter(description = "(String) 카테고리(좋아요순/거리순)", example = "거리순") @RequestParam(name = "category") String category){
+        return BaseResponse.OK(storeService.getStores(category));
     }
 
     @Operation(summary = "[윤희슬] 포장마차 상세 조회", description = "포장마차를 상세조회한다.")

@@ -31,12 +31,12 @@ public class GetStoreListRes {
     private String phone;
     @Schema(type = "String", description = "상점 이미지 리스트")
     private String imgUrl;
-    @Schema(type = "Integer", description = "상점 좋아요 수", example = "10")
+    @Schema(type = "Long", description = "상점 좋아요 수", example = "10")
     private Long likeCount;
     @Schema(type = "Integer", description = "상점 후기 수", example = "10")
-    private Long reviewCount;
+    private Integer reviewCount;
 
-    public static GetStoreListRes toDto(Store store){
+    public static GetStoreListRes toDto(Store store, Long likeCount){
         String imgUrl = getThumbnail(store);
         return GetStoreListRes.builder()
                 .name(store.getName())
@@ -46,6 +46,8 @@ public class GetStoreListRes {
                 .content(store.getContent())
                 .phone(store.getPhone())
                 .imgUrl(imgUrl)
+                .likeCount(likeCount)
+                .reviewCount(store.getStoreReviewList().size())
                 .build();
     }
 

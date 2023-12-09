@@ -24,6 +24,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.s1350.sooljangmacha.global.exception.BaseResponseCode.REQUEST_VALIDATION;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -32,17 +34,26 @@ public class StoreService {
     private final StoreLikeRepository storeLikeRepository;
     private final StoreImgRepository storeImgRepository;
     private final StoreReviewRepository storeReviewRepository;
-
+    private static final String DISTANCE = "거리순";
+    private static final String LIKE = "좋아요순";
 
     // 위치별 포장마차 전체 조회
-    public GetStoreListRes getStores() {
-        return null;
+    public List<GetStoreListRes> getStores(String category) {
+        if (category.equals(DISTANCE)){
+            return null;
+        }else if(category.equals(LIKE)) {
+            // 좋아요 순
+            return storeRepository.findAllByIsEnable(true).stream()
+                    .map(store -> GetStoreListRes.toDto(store, storeLikeRepository.getLikeCountByIsEnable(store)))
+                    .sorted((o1, o2) -> o2.getLikeCount().compareTo(o1.getLikeCount()))
+                    .collect(Collectors.toList());
+        }else throw new BaseException(REQUEST_VALIDATION);
     }
 
     // 포장마차 상세 조회
     public GetStoreRes getStore(Long storeId) {
         Store store = storeRepository.findByIdAndIsEnable(storeId, true).orElseThrow(() -> new BaseException(BaseResponseCode.STORE_NOT_FOUND));
-        return GetStoreRes.toDto(store, storeLikeRepository.getLikeCountByIsEnable());
+        return GetStoreRes.toDto(store, storeLikeRepository.getLikeCountByIsEnable(store));
     }
 
     // 포장마차 좋아요
