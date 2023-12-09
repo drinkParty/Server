@@ -38,8 +38,18 @@ public class StoreController {
 //    @Operation(summary = "포장마차 상세 조회", description = "")
 //    @GetMapping("/{storeId}")
 
-//    @Operation(summary = "포장마차 좋아요", description = "")
-//    @PostMapping ("/{storeId}/likes")
+    @Operation(summary = "[윤희슬] 포장마차 좋아요", description = "포장마차를 좋아요(즐겨찾기)한다.")
+    @PostMapping ("/{storeId}/likes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)포장마차 등록 성공"),
+            @ApiResponse(responseCode = "400", description = "(ST0002)이미 존재하는 포차입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
+    })
+    public BaseResponse postStoreLike(@Parameter(hidden = true) @UserAccount User user,
+                                  @PathVariable(name = "storeId") Long storeId){
+        storeService.postStoreLike(user, storeId);
+        return BaseResponse.OK();
+    }
+
 
     @Operation(summary = "[장채은] 포장마차 등록", description = "포장마차를 등록한다.")
     @ApiResponses(value = {

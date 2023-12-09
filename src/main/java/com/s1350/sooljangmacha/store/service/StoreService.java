@@ -6,8 +6,9 @@ import com.s1350.sooljangmacha.store.dto.request.PostStoreReq;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReviewReq;
 import com.s1350.sooljangmacha.store.dto.response.GetStoreReviewRes;
 import com.s1350.sooljangmacha.store.entity.Store;
-import com.s1350.sooljangmacha.store.entity.StoreReview;
 import com.s1350.sooljangmacha.store.entity.StoreImg;
+import com.s1350.sooljangmacha.store.entity.StoreLike;
+import com.s1350.sooljangmacha.store.entity.StoreReview;
 import com.s1350.sooljangmacha.store.repository.StoreImgRepository;
 import com.s1350.sooljangmacha.store.repository.StoreLikeRepository;
 import com.s1350.sooljangmacha.store.repository.StoreRepository;
@@ -36,9 +37,20 @@ public class StoreService {
     // 포장마차 상세 조회
 
     // 포장마차 좋아요
+    @Transactional
+    public void postStoreLike(User user, Long storeId) {
+        Store store = storeRepository.findByIdAndIsEnable(storeId, true).orElseThrow(() -> new BaseException(BaseResponseCode.STORE_NOT_FOUND));
+        storeLikeRepository.findByUserAndStore(user, store)
+                .ifPresentOrElse(
+                        sl -> {
+                           sl.changeValue();
+                           storeLikeRepository.save(sl);
+                        },
+                        () -> storeLikeRepository.save(StoreLike.toEntity(user, store))
+                );
+    }
 
     // 포장마차 등록
-
     @Transactional
     public void postStore(PostStoreReq req) {
         // 기획관련 한 번 더 물어보기 (예외처리)
