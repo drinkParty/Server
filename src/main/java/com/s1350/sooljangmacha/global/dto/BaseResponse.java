@@ -1,5 +1,6 @@
 package com.s1350.sooljangmacha.global.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.springframework.lang.Nullable;
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BaseResponse<T> {
     private final int status;
     private final String code;
@@ -30,7 +32,7 @@ public class BaseResponse<T> {
     }
 
     public static BaseResponse error(BaseResponseCode baseResponseCode, String message) {
-        return new BaseResponse<>(baseResponseCode.getStatus().value(), baseResponseCode.getCode(), baseResponseCode.getMessage());
+        return new BaseResponse<>(baseResponseCode.getStatus().value(), baseResponseCode.getCode(), message);
     }
 
 }
