@@ -2,7 +2,9 @@ package com.s1350.sooljangmacha.user.entity;
 
 import com.s1350.sooljangmacha.global.entity.BaseEntity;
 import com.s1350.sooljangmacha.global.entityListener.UserEntityListener;
+import com.s1350.sooljangmacha.global.utils.AwsS3Util;
 import com.s1350.sooljangmacha.store.entity.StoreLike;
+import com.s1350.sooljangmacha.user.dto.request.PatchProfileReq;
 import com.s1350.sooljangmacha.user.dto.request.SignupReq;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -70,5 +73,11 @@ public class User extends BaseEntity {
         this.address = address;
         this.imgKey = imgKey;
         this.provider = provider;
+    }
+
+    public void updateProfile(PatchProfileReq request) {
+        if (!Objects.equals(nickname, request.getNickname())) this.nickname = request.getNickname();
+        if (!Objects.equals(AwsS3Util.toUrl(imgKey), request.getImgKey())) this.imgKey = request.getImgKey();
+        if (!Objects.equals(address, request.getAddress())) this.address = request.getAddress();
     }
 }

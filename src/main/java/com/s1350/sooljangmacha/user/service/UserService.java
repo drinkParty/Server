@@ -6,6 +6,7 @@ import com.s1350.sooljangmacha.global.exception.BaseException;
 import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import com.s1350.sooljangmacha.global.utils.JwtUtil;
 import com.s1350.sooljangmacha.user.dto.request.LoginReq;
+import com.s1350.sooljangmacha.user.dto.request.PatchProfileReq;
 import com.s1350.sooljangmacha.user.dto.request.SignupReq;
 import com.s1350.sooljangmacha.user.dto.response.GetProfileRes;
 import com.s1350.sooljangmacha.user.dto.response.LoginRes;
@@ -63,6 +64,10 @@ public class UserService {
 
 
     // 프로필 편집
+    @Transactional
+    public void patchProfile(User user, PatchProfileReq request) {
+        user.updateProfile(request);
+    }
 
     // 포장마차 좋아요 목록 조회
 }
