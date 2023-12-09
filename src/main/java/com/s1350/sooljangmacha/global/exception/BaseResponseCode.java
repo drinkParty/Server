@@ -22,6 +22,8 @@ public enum BaseResponseCode {
     DATABASE_ERROR("E0003", HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 관련 에러입니다."),
     INTERNAL_SERVER_ERROR("E0004", HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러입니다."),
 
+    EXISTS_STORE("ST0001", HttpStatus.BAD_REQUEST, "이미 존재하는 포장마차입니다."),
+
     USER_NOT_FOUND("U0001", HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
     USER_ALREADY_EXIST("U0002", HttpStatus.BAD_REQUEST, "이미 가입된 유저입니다.");
 

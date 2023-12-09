@@ -1,13 +1,24 @@
 package com.s1350.sooljangmacha.store.controller;
 
+import com.s1350.sooljangmacha.global.dto.BaseResponse;
+import com.s1350.sooljangmacha.global.resolver.UserAccount;
+import com.s1350.sooljangmacha.store.dto.request.PostStoreReq;
 import com.s1350.sooljangmacha.store.service.StoreService;
+import com.s1350.sooljangmacha.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @Tag(name = "stores", description = "포장마차 API")
 @RestController
@@ -25,8 +36,17 @@ public class StoreController {
 //    @Operation(summary = "포장마차 좋아요", description = "")
 //    @PostMapping ("/{storeId}/likes")
 
-//    @Operation(summary = "포장마차 등록", description = "")
-//    @PostMapping("")
+    @Operation(summary = "[장채은] 포장마차 등록", description = "포장마차를 등록한다. ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)포장마차 등록 성공"),
+            @ApiResponse(responseCode = "400", description = "(U0002)휴대폰 형식을 확인해주세요. <br> (E0001)잘못된 요청입니다. <br> (ST0001)이미 존재하는 포차입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
+    })
+    @PostMapping("")
+    public BaseResponse postStore(@Parameter(hidden = true) @UserAccount User user,
+                                  @RequestBody @Valid PostStoreReq req){
+        storeService.postStore(req);
+        return BaseResponse.OK();
+    }
 
 //    @Operation(summary = "포장마차 후기 조회", description = "")
 //    @GetMapping("/{storeId}/reviews")
