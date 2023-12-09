@@ -49,11 +49,18 @@ public class UserService {
     }
 
     // 회원탈퇴
+    public void signout(User user, HttpServletRequest request) {
+        String header = request.getHeader(Constants.AUTHORIZATION_HEADER);
+        String token = jwtUtil.replaceBearer(header);
+        jwtUtil.logout(token, user.getId());
+        userRepository.delete(user);
+    }
 
     // 프로필 불러오기
     public GetProfileRes getProfile(User user) {
         return GetProfileRes.toDto(user);
     }
+
 
     // 프로필 편집
 

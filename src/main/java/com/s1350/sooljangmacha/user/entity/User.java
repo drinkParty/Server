@@ -1,6 +1,7 @@
 package com.s1350.sooljangmacha.user.entity;
 
 import com.s1350.sooljangmacha.global.entity.BaseEntity;
+import com.s1350.sooljangmacha.global.entityListener.UserEntityListener;
 import com.s1350.sooljangmacha.store.entity.StoreLike;
 import com.s1350.sooljangmacha.user.dto.request.SignupReq;
 import lombok.AccessLevel;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,6 +23,8 @@ import java.util.List;
 @DynamicUpdate
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE user SET is_enable = false, update_at = current_timestamp WHERE id = ?")
+@EntityListeners(UserEntityListener.class)
 public class User extends BaseEntity {
 
     @Id
