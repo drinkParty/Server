@@ -12,6 +12,7 @@ import com.s1350.sooljangmacha.user.entity.User;
 import com.s1350.sooljangmacha.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -28,6 +29,7 @@ public class UserService {
     }
 
     // 회원가입
+    @Transactional
     public LoginRes signup(SignupReq request) {
         if (userRepository.existsByEmailAndProviderAndIsEnable(request.getEmail(), Provider.valueOf(request.getProvider()), true))
             throw new BaseException(BaseResponseCode.USER_ALREADY_EXIST);
