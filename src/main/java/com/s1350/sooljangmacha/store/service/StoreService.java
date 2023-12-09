@@ -3,15 +3,20 @@ package com.s1350.sooljangmacha.store.service;
 import com.s1350.sooljangmacha.global.exception.BaseException;
 import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReq;
+import com.s1350.sooljangmacha.store.dto.request.PostStoreReviewReq;
 import com.s1350.sooljangmacha.store.entity.Store;
+import com.s1350.sooljangmacha.store.entity.StoreReview;
 import com.s1350.sooljangmacha.store.entity.StoreImg;
 import com.s1350.sooljangmacha.store.repository.StoreImgRepository;
 import com.s1350.sooljangmacha.store.repository.StoreLikeRepository;
 import com.s1350.sooljangmacha.store.repository.StoreRepository;
 import com.s1350.sooljangmacha.store.repository.StoreReviewRepository;
+import com.s1350.sooljangmacha.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.validation.Valid;
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +49,9 @@ public class StoreService {
     // 포장마차 후기 조회
 
     // 포장마차 후기 등록
-
+    @Transactional
+    public void postStoreReview(User user, Long storeId, @Valid PostStoreReviewReq req) {
+        Store store = storeRepository.findByIdAndIsEnable(storeId, true).orElseThrow(() -> new BaseException(BaseResponseCode.STORE_NOT_FOUND));
+        storeReviewRepository.save(StoreReview.toEntity(user, store, req.getContent()));
+    }
 }
