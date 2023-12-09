@@ -1,6 +1,7 @@
 package com.s1350.sooljangmacha.user.service;
 
 
+import com.s1350.sooljangmacha.global.Constants;
 import com.s1350.sooljangmacha.global.exception.BaseException;
 import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import com.s1350.sooljangmacha.global.utils.JwtUtil;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Stream;
+import javax.servlet.http.HttpServletRequest;
 
 
 @Service
@@ -48,20 +50,31 @@ public class UserService {
     }
 
     // 로그아웃
+    public void logout(User user, HttpServletRequest request) {
+        String header = request.getHeader(Constants.AUTHORIZATION_HEADER);
+        String token = jwtUtil.replaceBearer(header);
+        jwtUtil.logout(token, user.getId());
+    }
 
     // 회원탈퇴
+    public void signout(User user, HttpServletRequest request) {
+        String header = request.getHeader(Constants.AUTHORIZATION_HEADER);
+        String token = jwtUtil.replaceBearer(header);
+        jwtUtil.logout(token, user.getId());
+        userRepository.delete(user);
+    }
 
     // 프로필 불러오기
     public GetProfileRes getProfile(User user) {
         return GetProfileRes.toDto(user);
     }
 
+
+    // 프로필 편집
     @Transactional
     public void patchProfile(User user, PatchProfileReq request) {
         user.updateProfile(request);
     }
-
-    // 프로필 편집
 
     // 포장마차 좋아요 목록 조회
     public List<GetStoreListRes> getStoreOfLike(User user, String category) {

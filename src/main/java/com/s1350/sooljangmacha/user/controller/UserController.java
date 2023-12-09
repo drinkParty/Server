@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -32,7 +33,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @Operation(summary = "회원가입", description = "회원가입을 한다.")
+    @Operation(summary = "[박소정] 회원가입", description = "회원가입을 한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(E0001)잘못된 요청입니다. <br> (E0001)닉네임을 입력해 주세요. <br> (E0001)이메일을 입력해 주세요. <br> (E0001)provider를 입력해 주세요. <br> (E0001)올바른 이메일 형식으로 입력해 주세요. <br> (E0001)잘못된 provider 값 입니다. <br> (U0002)이미 가입된 유저입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class)))
@@ -42,7 +43,7 @@ public class UserController {
         return BaseResponse.OK(userService.signup(signupReq));
     }
 
-    @Operation(summary = "로그인", description = "로그인을 한다.")
+    @Operation(summary = "[박소정] 로그인", description = "로그인을 한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
             @ApiResponse(responseCode = "400", description = "(E0001)잘못된 요청입니다. <br> (E0001)이메일을 입력해 주세요. <br> (E0001)provider를 입력해 주세요. <br> (E0001)올바른 이메일 형식으로 입력해 주세요. <br> (E0001)잘못된 provider 값 입니다. <br>", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
@@ -53,12 +54,30 @@ public class UserController {
         return BaseResponse.OK(userService.login(loginReq));
     }
 
+    @Operation(summary = "[박소정] 로그아웃", description = "로그아웃한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(E0001)잘못된 요청입니다. <br> (E0001)이메일을 입력해 주세요. <br> (E0001)provider를 입력해 주세요. <br> (E0001)올바른 이메일 형식으로 입력해 주세요. <br> (E0001)잘못된 provider 값 입니다. <br>", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
+            @ApiResponse(responseCode = "404", description = "(U0001)존재하지 않는 유저입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
+    })
+    @PostMapping("/logout")
+    public BaseResponse logout(@Parameter(hidden = true) @UserAccount User user,
+                               HttpServletRequest request) {
+        userService.logout(user, request);
+        return BaseResponse.OK();
+    }
 
-//    @Operation(summary = "로그아웃", description = "")
-//    @PostMapping("/logout")
-
-//    @Operation(summary = "회원탈퇴", description = "")
-//    @PostMapping("/signout")
+    @Operation(summary = "[박소정] 회원탈퇴", description = "회원 탈퇴한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "404", description = "(U0001)존재하지 않는 유저입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
+    })
+    @PostMapping("/signout")
+    public BaseResponse signout(@Parameter(hidden = true) @UserAccount User user,
+                               HttpServletRequest request) {
+        userService.signout(user, request);
+        return BaseResponse.OK();
+    }
 
     @Operation(summary = "[김초원] 프로필 불러오기", description = "마이페이지의 프로필을 불러온다.")
     @ApiResponses(value = {

@@ -7,4 +7,5 @@ public class Constants {
     public static final String REVIEW = "후기순";
     public static final String DESC = "최신순";
     public static final String LIKE = "좋아요순";
+    public static final String LOGOUT = "LOGOUT";
 }
