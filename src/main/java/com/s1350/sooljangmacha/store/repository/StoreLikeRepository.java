@@ -10,8 +10,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface StoreLikeRepository extends JpaRepository<StoreLike, Long> {
+
+    void deleteByUser(User user);
+
     Optional<StoreLike> findByUserAndStore(User user, Store store);
 
     @Query("SELECT COUNT(s.id) FROM StoreLike s WHERE s.isEnable = 1 and s.store = :store")
     Long getLikeCountByIsEnable(@Param("store") Store store);
+
 }

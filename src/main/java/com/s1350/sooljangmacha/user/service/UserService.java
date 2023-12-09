@@ -50,18 +50,24 @@ public class UserService {
     }
 
     // 회원탈퇴
+    public void signout(User user, HttpServletRequest request) {
+        String header = request.getHeader(Constants.AUTHORIZATION_HEADER);
+        String token = jwtUtil.replaceBearer(header);
+        jwtUtil.logout(token, user.getId());
+        userRepository.delete(user);
+    }
 
     // 프로필 불러오기
     public GetProfileRes getProfile(User user) {
         return GetProfileRes.toDto(user);
     }
 
+
+    // 프로필 편집
     @Transactional
     public void patchProfile(User user, PatchProfileReq request) {
         user.updateProfile(request);
     }
-
-    // 프로필 편집
 
     // 포장마차 좋아요 목록 조회
 }
