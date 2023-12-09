@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.s1350.sooljangmacha.global.Constants.*;
 import static com.s1350.sooljangmacha.global.exception.BaseResponseCode.REQUEST_VALIDATION;
 
 @Service
@@ -35,14 +36,15 @@ public class StoreService {
     private final StoreLikeRepository storeLikeRepository;
     private final StoreImgRepository storeImgRepository;
     private final StoreReviewRepository storeReviewRepository;
-    private static final String REVIEW = "후기순";
-    private static final String DESC = "최신순";
-    private static final String LIKE = "좋아요순";
 
     // 위치별 포장마차 전체 조회
-    public List<GetStoreListRes> getStores(String category) {
+    public List<GetStoreListRes> getStores(User user, String category) {
         Stream<GetStoreListRes> getStoreListResStream = storeRepository.findAllByIsEnable(true).stream()
-                .map(store -> GetStoreListRes.toDto(store, storeLikeRepository.getLikeCountByIsEnable(store)));
+                .map(store -> GetStoreListRes.toDto(store, storeLikeRepository.getLikeCountByIsEnable(store), storeLikeRepository.existsByUserAndStoreAndIsEnable(user, store, true)));
+        return sortStoreList(category, getStoreListResStream);
+    }
+
+    public List<GetStoreListRes> sortStoreList(String category, Stream<GetStoreListRes> getStoreListResStream) {
         switch (category) {
             case REVIEW:
                 return getStoreListResStream
