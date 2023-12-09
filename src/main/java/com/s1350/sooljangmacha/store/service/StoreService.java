@@ -4,6 +4,7 @@ import com.s1350.sooljangmacha.global.exception.BaseException;
 import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReq;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReviewReq;
+import com.s1350.sooljangmacha.store.dto.response.GetStoreReviewRes;
 import com.s1350.sooljangmacha.store.entity.Store;
 import com.s1350.sooljangmacha.store.entity.StoreReview;
 import com.s1350.sooljangmacha.store.entity.StoreImg;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +50,12 @@ public class StoreService {
     }
 
     // 포장마차 후기 조회
+    public List<GetStoreReviewRes> getStoreReview(Long storeId) {
+        Store store = storeRepository.findByIdAndIsEnable(storeId, true).orElseThrow(() -> new BaseException(BaseResponseCode.STORE_NOT_FOUND));
+        return store.getStoreReviewList().stream()
+                .map(GetStoreReviewRes::toDto)
+                .collect(Collectors.toList());
+    }
 
     // 포장마차 후기 등록
     @Transactional
