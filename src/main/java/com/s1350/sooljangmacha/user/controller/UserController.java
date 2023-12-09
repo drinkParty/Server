@@ -3,6 +3,7 @@ package com.s1350.sooljangmacha.user.controller;
 import com.s1350.sooljangmacha.global.dto.BaseResponse;
 import com.s1350.sooljangmacha.global.resolver.UserAccount;
 import com.s1350.sooljangmacha.user.dto.request.LoginReq;
+import com.s1350.sooljangmacha.user.dto.request.PatchProfileReq;
 import com.s1350.sooljangmacha.user.dto.request.SignupReq;
 import com.s1350.sooljangmacha.user.dto.response.GetProfileRes;
 import com.s1350.sooljangmacha.user.dto.response.LoginRes;
@@ -67,8 +68,17 @@ public class UserController {
         return BaseResponse.OK(userService.getProfile(user));
     }
 
-//    @Operation(summary = "프로필 편집", description = "")
-//    @PatchMapping("")
+    @Operation(summary = "[김초원] 프로필 편집", description = "마이페이지의 프로필을 편집한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "404", description = "(U0001)존재하지 않는 유저입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
+    })
+    @PatchMapping("")
+    public BaseResponse patchProfile(@Parameter(hidden = true) @UserAccount User user,
+                                     @RequestBody @Valid PatchProfileReq patchProfileReq) {
+        userService.patchProfile(user, patchProfileReq);
+        return BaseResponse.OK();
+    }
 
 //    @Operation(summary = "포장마차 좋아요 목록 조회", description = "")
 //    @GetMapping("/likes")
