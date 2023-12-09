@@ -4,6 +4,7 @@ import com.s1350.sooljangmacha.global.exception.BaseException;
 import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReq;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReviewReq;
+import com.s1350.sooljangmacha.store.dto.response.GetStoreRes;
 import com.s1350.sooljangmacha.store.dto.response.GetStoreReviewRes;
 import com.s1350.sooljangmacha.store.entity.Store;
 import com.s1350.sooljangmacha.store.entity.StoreImg;
@@ -35,6 +36,10 @@ public class StoreService {
     // 위치별 포장마차 전체 조회
 
     // 포장마차 상세 조회
+    public GetStoreRes getStore(Long storeId) {
+        Store store = storeRepository.findByIdAndIsEnable(storeId, true).orElseThrow(() -> new BaseException(BaseResponseCode.STORE_NOT_FOUND));
+        return GetStoreRes.toDto(store);
+    }
 
     // 포장마차 좋아요
     @Transactional
