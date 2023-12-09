@@ -52,7 +52,6 @@ public class UserController {
         return BaseResponse.OK(userService.login(loginReq));
     }
 
-
     @Operation(summary = "[박소정] 로그아웃", description = "로그아웃한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
@@ -65,7 +64,6 @@ public class UserController {
         userService.logout(user, request);
         return BaseResponse.OK();
     }
-
 
     @Operation(summary = "[박소정] 회원탈퇴", description = "회원 탈퇴한다.")
     @ApiResponses(value = {
