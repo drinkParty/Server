@@ -55,7 +55,6 @@ public class UserController {
     @Operation(summary = "[박소정] 로그아웃", description = "로그아웃한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
-            @ApiResponse(responseCode = "400", description = "(E0001)잘못된 요청입니다. <br> (E0001)이메일을 입력해 주세요. <br> (E0001)provider를 입력해 주세요. <br> (E0001)올바른 이메일 형식으로 입력해 주세요. <br> (E0001)잘못된 provider 값 입니다. <br>", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
             @ApiResponse(responseCode = "404", description = "(U0001)존재하지 않는 유저입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
     })
     @PostMapping("/logout")
