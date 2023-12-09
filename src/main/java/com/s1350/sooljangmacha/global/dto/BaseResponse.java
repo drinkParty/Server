@@ -30,7 +30,7 @@ public class BaseResponse<T> {
     }
 
     public static BaseResponse error(BaseResponseCode baseResponseCode, String message) {
-        return new BaseResponse<>(baseResponseCode.getStatus().value(), baseResponseCode.getCode(), baseResponseCode.getMessage());
+        return new BaseResponse<>(baseResponseCode.getStatus().value(), baseResponseCode.getCode(), message);
     }
 
 }

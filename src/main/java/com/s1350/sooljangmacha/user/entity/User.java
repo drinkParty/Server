@@ -26,6 +26,10 @@ public class User extends BaseEntity {
     private Long id;
 
     @NotNull
+    @Size(max = 255)
+    private String email;
+
+    @NotNull
     @Size(max = 30)
     private String nickname;
 
