@@ -2,7 +2,9 @@ package com.s1350.sooljangmacha.user.entity;
 
 import com.s1350.sooljangmacha.global.entity.BaseEntity;
 import com.s1350.sooljangmacha.store.entity.StoreLike;
+import com.s1350.sooljangmacha.user.dto.request.SignupReq;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -47,4 +49,22 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<StoreLike> storeLikeList = new ArrayList<>();
 
+    public static User toEntity(SignupReq request) {
+        return User.builder()
+                .email(request.getEmail())
+                .nickname(request.getNickname())
+                .address(request.getAddress())
+                .imgKey(request.getImgKey())
+                .provider(Provider.valueOf(request.getProvider()))
+                .build();
+    }
+
+    @Builder
+    public User(String email, String nickname, String address, String imgKey, Provider provider) {
+        this.email = email;
+        this.nickname = nickname;
+        this.address = address;
+        this.imgKey = imgKey;
+        this.provider = provider;
+    }
 }

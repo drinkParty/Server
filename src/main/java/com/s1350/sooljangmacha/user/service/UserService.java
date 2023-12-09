@@ -5,6 +5,7 @@ import com.s1350.sooljangmacha.global.exception.BaseException;
 import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import com.s1350.sooljangmacha.global.utils.JwtUtil;
 import com.s1350.sooljangmacha.user.dto.request.LoginReq;
+import com.s1350.sooljangmacha.user.dto.request.SignupReq;
 import com.s1350.sooljangmacha.user.dto.response.LoginRes;
 import com.s1350.sooljangmacha.user.entity.Provider;
 import com.s1350.sooljangmacha.user.entity.User;
@@ -23,6 +24,14 @@ public class UserService {
     public LoginRes login(LoginReq request) {
         User user = userRepository.findByEmailAndProviderAndIsEnable(request.getEmail(), Provider.valueOf(request.getProvider()), true)
                 .orElseThrow(() -> new BaseException(BaseResponseCode.USER_NOT_FOUND));
+        return LoginRes.toEntity(jwtUtil.issuedAccessToken(user.getId()));
+    }
+
+    // 회원가입
+    public LoginRes signup(SignupReq request) {
+        if (userRepository.existsByEmailAndProviderAndIsEnable(request.getEmail(), Provider.valueOf(request.getProvider()), true))
+            throw new BaseException(BaseResponseCode.USER_ALREADY_EXIST);
+        User user = userRepository.save(User.toEntity(request));
         return LoginRes.toEntity(jwtUtil.issuedAccessToken(user.getId()));
     }
 

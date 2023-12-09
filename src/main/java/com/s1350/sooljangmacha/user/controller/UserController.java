@@ -2,6 +2,7 @@ package com.s1350.sooljangmacha.user.controller;
 
 import com.s1350.sooljangmacha.global.dto.BaseResponse;
 import com.s1350.sooljangmacha.user.dto.request.LoginReq;
+import com.s1350.sooljangmacha.user.dto.request.SignupReq;
 import com.s1350.sooljangmacha.user.dto.response.LoginRes;
 import com.s1350.sooljangmacha.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +25,16 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+
+    @Operation(summary = "회원가입", description = "회원가입을 한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "400", description = "(E0001)잘못된 요청입니다. <br> (E0001)닉네임을 입력해 주세요. <br> (E0001)이메일을 입력해 주세요. <br> (E0001)provider를 입력해 주세요. <br> (E0001)올바른 이메일 형식으로 입력해 주세요. <br> (E0001)잘못된 provider 값 입니다. <br> (U0002)이미 가입된 유저입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class)))
+    })
+    @PostMapping("/signup")
+    public BaseResponse<LoginRes> signup(@RequestBody @Valid SignupReq signupReq) {
+        return BaseResponse.OK(userService.signup(signupReq));
+    }
 
     @Operation(summary = "로그인", description = "로그인을 한다.")
     @ApiResponses(value = {
