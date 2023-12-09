@@ -6,6 +6,7 @@ import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import com.s1350.sooljangmacha.global.utils.JwtUtil;
 import com.s1350.sooljangmacha.user.dto.request.LoginReq;
 import com.s1350.sooljangmacha.user.dto.request.SignupReq;
+import com.s1350.sooljangmacha.user.dto.response.GetProfileRes;
 import com.s1350.sooljangmacha.user.dto.response.LoginRes;
 import com.s1350.sooljangmacha.user.entity.Provider;
 import com.s1350.sooljangmacha.user.entity.User;
@@ -42,6 +43,9 @@ public class UserService {
     // 회원탈퇴
 
     // 프로필 불러오기
+    public GetProfileRes getProfile(User user) {
+        return GetProfileRes.toDto(user);
+    }
 
     // 프로필 편집
 
