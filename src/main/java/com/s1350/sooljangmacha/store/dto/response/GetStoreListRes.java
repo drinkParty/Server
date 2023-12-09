@@ -10,13 +10,12 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Pattern;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetStoreRes {
+public class GetStoreListRes {
     @Schema(type = "String", description = "상점 이름", example = "술장마차1호점")
     private String name;
     @Schema(type = "String", description = "상점 주소", example = "서울특별시 서대문구 거북골로 34")
@@ -30,24 +29,28 @@ public class GetStoreRes {
     @Schema(type = "String", description = "상점 전화번호", example = "010-9999-9999")
     @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$")
     private String phone;
-    @Schema(type = "List", description = "상점 이미지 리스트")
-    private List<String> imgUrls;
-    @Schema(type = "Long", description = "상점 좋아요 수", example = "10")
+    @Schema(type = "String", description = "상점 이미지 리스트")
+    private String imgUrl;
+    @Schema(type = "Integer", description = "상점 좋아요 수", example = "10")
     private Long likeCount;
     @Schema(type = "Integer", description = "상점 후기 수", example = "10")
-    private Integer reviewCount;
+    private Long reviewCount;
 
-    public static GetStoreRes toDto(Store store, Long likeCount){
-        return GetStoreRes.builder()
+    public static GetStoreListRes toDto(Store store){
+        String imgUrl = getThumbnail(store);
+        return GetStoreListRes.builder()
                 .name(store.getName())
                 .address(store.getAddress())
                 .x(store.getX())
                 .y(store.getY())
                 .content(store.getContent())
                 .phone(store.getPhone())
-                .imgUrls(store.getStoreImgList().stream().map(StoreImg::getImgKey).collect(Collectors.toList()))
-                .likeCount(likeCount)
-                .reviewCount(store.getStoreReviewList().size())
+                .imgUrl(imgUrl)
                 .build();
+    }
+
+    private static String getThumbnail(Store store) {
+        List<StoreImg> storeImgList = store.getStoreImgList();
+        return storeImgList.size() == 0 ? null : storeImgList.get(0).getImgKey();
     }
 }

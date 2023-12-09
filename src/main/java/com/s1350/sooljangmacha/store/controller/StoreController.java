@@ -4,6 +4,7 @@ import com.s1350.sooljangmacha.global.dto.BaseResponse;
 import com.s1350.sooljangmacha.global.resolver.UserAccount;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReq;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReviewReq;
+import com.s1350.sooljangmacha.store.dto.response.GetStoreListRes;
 import com.s1350.sooljangmacha.store.dto.response.GetStoreRes;
 import com.s1350.sooljangmacha.store.dto.response.GetStoreReviewRes;
 import com.s1350.sooljangmacha.store.service.StoreService;
@@ -33,8 +34,11 @@ import java.util.List;
 public class StoreController {
     private final StoreService storeService;
 
-//    @Operation(summary = "위치별 포장마차 전체 조회", description = "")
-//    @GetMapping("")
+    @Operation(summary = "[윤희슬] 위치별 포장마차 전체 조회", description = "")
+    @GetMapping("")
+    public BaseResponse<GetStoreListRes> getStores(@Parameter(hidden = true) @UserAccount User user){
+        return BaseResponse.OK(storeService.getStores());
+    }
 
     @Operation(summary = "[윤희슬] 포장마차 상세 조회", description = "포장마차를 상세조회한다.")
     @GetMapping("/{storeId}")
