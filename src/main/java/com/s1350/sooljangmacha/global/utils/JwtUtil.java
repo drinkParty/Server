@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Date;
 
 import static com.s1350.sooljangmacha.global.Constants.BEARER_PREFIX;
 import static com.s1350.sooljangmacha.global.Constants.CLAIM_NAME;
@@ -18,6 +19,8 @@ public class JwtUtil {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
+
+    private final long accessTokenExpiryTime = 1000L * 60 * 60 * 24 * 14; // 2주
 
     public static String replaceBearer(String header) {
         return header.substring(BEARER_PREFIX.length());
@@ -56,5 +59,26 @@ public class JwtUtil {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    public String issuedAccessToken(Long userId) {
+        return issuedToken("access_token", accessTokenExpiryTime, String.valueOf(userId));
+    }
+
+    public String issuedToken(String tokenName, long expiryTime, String userId) {
+        final Date now = new Date();
+
+        final Claims claims = Jwts.claims()
+                .setSubject(tokenName)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + expiryTime));
+
+        claims.put(CLAIM_NAME, userId);
+
+        return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setClaims(claims)
+                .signWith(getSigningKey())
+                .compact();
     }
 }
