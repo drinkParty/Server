@@ -59,12 +59,14 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(DataAccessException.class)
     public BaseResponse handleDataAccessException(DataAccessException e) {
+        e.printStackTrace();
         return BaseResponse.error(BaseResponseCode.DATABASE_ERROR, String.format("%s", BaseResponseCode.DATABASE_ERROR.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public BaseResponse handleHttpMessageNotReadableException(Exception e) {
+        e.printStackTrace();
         return BaseResponse.error(BaseResponseCode.INTERNAL_SERVER_ERROR, String.format("%s", BaseResponseCode.INTERNAL_SERVER_ERROR.getMessage()));
     }
 

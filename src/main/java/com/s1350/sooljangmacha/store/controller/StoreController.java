@@ -4,6 +4,7 @@ import com.s1350.sooljangmacha.global.dto.BaseResponse;
 import com.s1350.sooljangmacha.global.resolver.UserAccount;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReq;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReviewReq;
+import com.s1350.sooljangmacha.store.dto.response.GetStoreReviewRes;
 import com.s1350.sooljangmacha.store.service.StoreService;
 import com.s1350.sooljangmacha.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Tag(name = "stores", description = "포장마차 API")
 @RestController
@@ -39,7 +41,7 @@ public class StoreController {
 //    @Operation(summary = "포장마차 좋아요", description = "")
 //    @PostMapping ("/{storeId}/likes")
 
-    @Operation(summary = "[장채은] 포장마차 등록", description = "포장마차를 등록한다. ")
+    @Operation(summary = "[장채은] 포장마차 등록", description = "포장마차를 등록한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)포장마차 등록 성공"),
             @ApiResponse(responseCode = "400", description = "(U0002)휴대폰 형식을 확인해주세요. <br> (E0001)잘못된 요청입니다. <br> (ST0001)이미 존재하는 포차입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
@@ -51,10 +53,17 @@ public class StoreController {
         return BaseResponse.OK();
     }
 
-//    @Operation(summary = "포장마차 후기 조회", description = "")
-//    @GetMapping("/{storeId}/reviews")
+    @Operation(summary = "[장채은] 포장마차 후기 조회", description = "포장마차 후기 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)포장마차 후기 조회 성공"),
+    })
+    @GetMapping("/{storeId}/reviews")
+    public BaseResponse<List<GetStoreReviewRes>> getStoreReview(@Parameter(hidden = true) @UserAccount User user,
+                                                                @PathVariable(name = "storeId") Long storeId){
+        return BaseResponse.OK(storeService.getStoreReview(storeId));
+    }
 
-    @Operation(summary = "포장마차 후기 등록", description = "포장마차 후기를 등록한다.")
+    @Operation(summary = "[장채은] 포장마차 후기 등록", description = "포장마차 후기를 등록한다.")
     @PostMapping("/{storeId}/reviews")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "(S0001)포장마차 후기 등록 성공"),
