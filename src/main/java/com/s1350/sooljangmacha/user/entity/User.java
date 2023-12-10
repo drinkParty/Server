@@ -3,6 +3,7 @@ package com.s1350.sooljangmacha.user.entity;
 import com.s1350.sooljangmacha.global.entity.BaseEntity;
 import com.s1350.sooljangmacha.global.entityListener.UserEntityListener;
 import com.s1350.sooljangmacha.global.utils.AwsS3Util;
+import com.s1350.sooljangmacha.store.entity.Store;
 import com.s1350.sooljangmacha.store.entity.StoreLike;
 import com.s1350.sooljangmacha.user.dto.request.PatchProfileReq;
 import com.s1350.sooljangmacha.user.dto.request.SignupReq;
@@ -55,6 +56,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<StoreLike> storeLikeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Store> storeList = new ArrayList<>();
 
     public static User toEntity(SignupReq request) {
         return User.builder()

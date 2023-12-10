@@ -84,11 +84,11 @@ public class StoreService {
 
     // 포장마차 등록
     @Transactional
-    public void postStore(PostStoreReq req) {
+    public void postStore(User user, PostStoreReq req) {
         // 기획관련 한 번 더 물어보기 (예외처리)
         if(storeRepository.existsByXAndYAndIsEnable(req.getX(), req.getY(), true)) throw new BaseException(BaseResponseCode.EXISTS_STORE);
         // 저장
-        Store store = Store.toEntity(req);
+        Store store = Store.toEntity(user, req);
         storeRepository.save(store);
         storeImgRepository.saveAll(StoreImg.toEntityList(req.getImgUrls(), store));
     }
