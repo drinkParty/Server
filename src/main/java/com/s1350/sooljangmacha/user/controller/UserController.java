@@ -112,4 +112,14 @@ public class UserController {
         return BaseResponse.OK(userService.getStoreOfLike(user, category));
     }
 
+    @Operation(summary = "[김초원] 내 포차 조회", description = "마이페이지의 내 포차 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "(S0001)요청에 성공했습니다."),
+            @ApiResponse(responseCode = "404", description = "(E0001)잘못된 요청입니다.", content = @Content(schema = @Schema(implementation = BaseResponse.class))),
+    })
+    @GetMapping("/stores")
+    public BaseResponse<List<GetStoreListRes>> getMyStore(@Parameter(hidden = true) @UserAccount User user) {
+        return BaseResponse.OK(userService.getMyStore(user));
+    }
+
 }

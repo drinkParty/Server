@@ -2,6 +2,7 @@ package com.s1350.sooljangmacha.store.entity;
 
 import com.s1350.sooljangmacha.global.entity.BaseEntity;
 import com.s1350.sooljangmacha.store.dto.request.PostStoreReq;
+import com.s1350.sooljangmacha.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +42,10 @@ public class Store extends BaseEntity {
     @Size(max = 255)
     private String content;
 
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
+
     @OneToMany(mappedBy = "store")
     private List<StoreImg> storeImgList = new ArrayList<>();
 
@@ -51,16 +56,17 @@ public class Store extends BaseEntity {
     private List<StoreReview> storeReviewList = new ArrayList<>();
 
     @Builder
-    public Store(String x, String y, String name, String address, String phone, String content) {
+    public Store(String x, String y, String name, String address, String phone, String content, User user) {
         this.x = x;
         this.y = y;
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.content = content;
+        this.user = user;
     }
 
-    public static Store toEntity(PostStoreReq req){
+    public static Store toEntity(User user, PostStoreReq req){
         return Store.builder()
                 .name(req.getName())
                 .address(req.getAddress())
@@ -68,6 +74,7 @@ public class Store extends BaseEntity {
                 .y(req.getY())
                 .content(req.getContent())
                 .phone(req.getPhone())
+                .user(user)
                 .build();
     }
 

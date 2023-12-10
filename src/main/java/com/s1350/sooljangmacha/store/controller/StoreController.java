@@ -78,7 +78,7 @@ public class StoreController {
     @PostMapping("")
     public BaseResponse postStore(@Parameter(hidden = true) @UserAccount User user,
                                   @RequestBody @Valid PostStoreReq req){
-        storeService.postStore(req);
+        storeService.postStore(user, req);
         return BaseResponse.OK();
     }
 

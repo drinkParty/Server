@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 
@@ -81,5 +82,12 @@ public class UserService {
         Stream<GetStoreListRes> likeStoreList = user.getStoreLikeList().stream()
                 .map(sl -> GetStoreListRes.toDto(sl.getStore(), storeLikeRepository.getLikeCountByIsEnable(sl.getStore()), storeLikeRepository.existsByUserAndStoreAndIsEnable(user, sl.getStore(), true)));
         return storeService.sortStoreList(category, likeStoreList);
+    }
+
+    // 내 포차 관리
+    public List<GetStoreListRes> getMyStore(User user) {
+        return user.getStoreList().stream()
+                .map(s -> GetStoreListRes.toDto(s, storeLikeRepository.getLikeCountByIsEnable(s), storeLikeRepository.existsByUserAndStoreAndIsEnable(user, s, true)))
+                .collect(Collectors.toList());
     }
 }
