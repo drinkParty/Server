@@ -63,9 +63,9 @@ public class StoreService {
     }
 
     // 포장마차 상세 조회
-    public GetStoreRes getStore(Long storeId) {
+    public GetStoreRes getStore(User user, Long storeId) {
         Store store = storeRepository.findByIdAndIsEnable(storeId, true).orElseThrow(() -> new BaseException(BaseResponseCode.STORE_NOT_FOUND));
-        return GetStoreRes.toDto(store, storeLikeRepository.getLikeCountByIsEnable(store));
+        return GetStoreRes.toDto(store, storeLikeRepository.getLikeCountByIsEnable(store), storeLikeRepository.existsByUserAndStoreAndIsEnable(user, store, true));
     }
 
     // 포장마차 좋아요
