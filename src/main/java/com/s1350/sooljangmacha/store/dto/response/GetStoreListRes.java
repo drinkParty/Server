@@ -16,6 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetStoreListRes {
+    @Schema(type = "Long", description = "상점 id", example = "1")
+    private Long id;
     @Schema(type = "String", description = "상점 이름", example = "술장마차1호점")
     private String name;
     @Schema(type = "String", description = "상점 주소", example = "서울특별시 서대문구 거북골로 34")
@@ -41,6 +43,7 @@ public class GetStoreListRes {
     public static GetStoreListRes toDto(Store store, Long likeCount, boolean isLike){
         String imgUrl = getThumbnail(store);
         return GetStoreListRes.builder()
+                .id(store.getId())
                 .name(store.getName())
                 .address(store.getAddress())
                 .x(store.getX())
