@@ -4,27 +4,33 @@ import com.s1350.sooljangmacha.global.exception.BaseException;
 import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
-import static com.s1350.sooljangmacha.global.Constants.BEARER_PREFIX;
-import static com.s1350.sooljangmacha.global.Constants.CLAIM_NAME;
+import static com.s1350.sooljangmacha.global.Constants.*;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
 
     private final long accessTokenExpiryTime = 1000L * 60 * 60 * 24 * 14; // 2주
+    private final RedisTemplate<String, String> redisTemplate;
 
     public static String replaceBearer(String header) {
         return header.substring(BEARER_PREFIX.length());
     }
+
 
     public boolean validateToken(String token) {
         try {
@@ -55,6 +61,7 @@ public class JwtUtil {
 
     private Claims getBody(String token) {
         try {
+            if(StringUtils.hasText(redisTemplate.opsForValue().get(token))) throw new BaseException(BaseResponseCode.EXPIRED_TOKEN);
             return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
@@ -80,5 +87,23 @@ public class JwtUtil {
                 .setClaims(claims)
                 .signWith(getSigningKey())
                 .compact();
+    }
+
+    public void logout(String token, Long userId) {
+        setValueOfRedis(token, LOGOUT, getExpiration(token), TimeUnit.MILLISECONDS);
+        deleteToken(String.valueOf(userId));
+    }
+
+    private void setValueOfRedis(String key, String value, Long expiration, TimeUnit time) {
+        redisTemplate.opsForValue().set(key, value, expiration, time);
+    }
+
+    private Long getExpiration(String token) {
+        Date expiration = getBody(token).getExpiration();
+        return expiration.getTime() - new Date().getTime();
+    }
+
+    private void deleteToken(String userId) {
+        if (redisTemplate.opsForValue().get(userId) != null) redisTemplate.delete(userId);
     }
 }

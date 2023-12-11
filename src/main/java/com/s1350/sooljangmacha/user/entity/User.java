@@ -1,7 +1,9 @@
 package com.s1350.sooljangmacha.user.entity;
 
 import com.s1350.sooljangmacha.global.entity.BaseEntity;
+import com.s1350.sooljangmacha.global.entityListener.UserEntityListener;
 import com.s1350.sooljangmacha.global.utils.AwsS3Util;
+import com.s1350.sooljangmacha.store.entity.Store;
 import com.s1350.sooljangmacha.store.entity.StoreLike;
 import com.s1350.sooljangmacha.user.dto.request.PatchProfileReq;
 import com.s1350.sooljangmacha.user.dto.request.SignupReq;
@@ -11,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,6 +27,8 @@ import java.util.Objects;
 @DynamicUpdate
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE user SET is_enable = false, update_at = current_timestamp WHERE id = ?")
+@EntityListeners(UserEntityListener.class)
 public class User extends BaseEntity {
 
     @Id
@@ -51,6 +56,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<StoreLike> storeLikeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Store> storeList = new ArrayList<>();
 
     public static User toEntity(SignupReq request) {
         return User.builder()
