@@ -36,8 +36,10 @@ public class GetStoreRes {
     private Long likeCount;
     @Schema(type = "Integer", description = "상점 후기 수", example = "10")
     private Integer reviewCount;
+    @Schema(type = "Boolean", description = "상점 좋아요 유무", example = "true")
+    private Boolean isLike;
 
-    public static GetStoreRes toDto(Store store, Long likeCount){
+    public static GetStoreRes toDto(Store store, Long likeCount, boolean isLike){
         return GetStoreRes.builder()
                 .name(store.getName())
                 .address(store.getAddress())
@@ -48,6 +50,7 @@ public class GetStoreRes {
                 .imgUrls(store.getStoreImgList().stream().map(StoreImg::getImgKey).collect(Collectors.toList()))
                 .likeCount(likeCount)
                 .reviewCount(store.getStoreReviewList().size())
+                .isLike(isLike)
                 .build();
     }
 }

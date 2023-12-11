@@ -54,7 +54,7 @@ public class StoreController {
     })
     public BaseResponse<GetStoreRes> getStore(@Parameter(hidden = true) @UserAccount User user,
                                               @PathVariable(name = "storeId") Long storeId){
-        return BaseResponse.OK(storeService.getStore(storeId));
+        return BaseResponse.OK(storeService.getStore(user, storeId));
     }
 
     @Operation(summary = "[윤희슬] 포장마차 좋아요", description = "포장마차를 좋아요(즐겨찾기)한다.")
