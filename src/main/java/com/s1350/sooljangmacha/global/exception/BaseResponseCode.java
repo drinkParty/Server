@@ -16,6 +16,7 @@ public enum BaseResponseCode {
     MALFORMED_TOKEN("T0004", HttpStatus.UNAUTHORIZED, "잘못된 구조의 토큰 값입니다."),
     EXPIRED_TOKEN("T0005", HttpStatus.FORBIDDEN, "만료된 토큰 값입니다."),
     NOT_ACCESS_HEADER("T0006", HttpStatus.INTERNAL_SERVER_ERROR, "헤더에 접근할 수 없습니다."),
+    HEADER_DECODE_ERROR("T0007", HttpStatus.INTERNAL_SERVER_ERROR, "디코딩 에러입니다."),
 
     REQUEST_VALIDATION("E0001", HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     REQUEST_NOT_READABLE("E0002", HttpStatus.BAD_REQUEST, "잘못된 데이터 포맷입니다."),

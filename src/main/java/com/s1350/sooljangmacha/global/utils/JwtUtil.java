@@ -3,6 +3,7 @@ package com.s1350.sooljangmacha.global.utils;
 import com.s1350.sooljangmacha.global.exception.BaseException;
 import com.s1350.sooljangmacha.global.exception.BaseResponseCode;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,11 @@ public class JwtUtil {
     private final RedisTemplate<String, String> redisTemplate;
 
     public static String replaceBearer(String header) {
-        return header.replace(BEARER_PREFIX, "");
+        try {
+            return header.substring(BEARER_PREFIX.length());
+        } catch (DecodingException e) {
+            throw new BaseException(BaseResponseCode.HEADER_DECODE_ERROR);
+        }
     }
 
 
