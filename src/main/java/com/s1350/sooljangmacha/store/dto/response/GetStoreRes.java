@@ -1,5 +1,6 @@
 package com.s1350.sooljangmacha.store.dto.response;
 
+import com.s1350.sooljangmacha.global.utils.AwsS3Util;
 import com.s1350.sooljangmacha.store.entity.Store;
 import com.s1350.sooljangmacha.store.entity.StoreImg;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -47,7 +48,7 @@ public class GetStoreRes {
                 .y(store.getY())
                 .content(store.getContent())
                 .phone(store.getPhone())
-                .imgUrls(store.getStoreImgList().stream().map(StoreImg::getImgKey).collect(Collectors.toList()))
+                .imgUrls(store.getStoreImgList().stream().map(i -> AwsS3Util.toUrl(i.getImgKey())).collect(Collectors.toList()))
                 .likeCount(likeCount)
                 .reviewCount(store.getStoreReviewList().size())
                 .isLike(isLike)
