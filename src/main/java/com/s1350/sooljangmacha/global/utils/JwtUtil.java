@@ -28,7 +28,7 @@ public class JwtUtil {
     private final RedisTemplate<String, String> redisTemplate;
 
     public static String replaceBearer(String header) {
-        return header.substring(BEARER_PREFIX.length());
+        return header.replace(BEARER_PREFIX, "");
     }
 
 
